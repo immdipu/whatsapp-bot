@@ -14,14 +14,18 @@ const app = express();
 app.use(express.json());
 
 const getRes = async (text) => {
-  const res = await axios.post("https://www.botlibre.com/rest/json/chat", {
-    application: applicatoin_id,
-    instance: "165",
-    message: text,
-  });
-  const result = res.data.message;
-  console.log(result);
-  return result;
+  try {
+    const res = await axios.post("https://www.botlibre.com/rest/json/chat", {
+      application: applicatoin_id,
+      instance: "165",
+      message: text,
+    });
+    const result = res.data.message;
+    console.log(result);
+    return result;
+  } catch (error) {
+    return "No result found";
+  }
 };
 
 app.get("/webhooks", (req, res) => {
@@ -60,24 +64,32 @@ app.post("/webhooks", (req, res) => {
           },
         });
 
-        await axios.post(
-          `https://graph.facebook.com/v16.0/${phoneNumberId}/messages`,
-          newdata,
-          {
-            headers: {
-              Authorization: `Bearer ${access_token}`,
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        res.status(200);
+        await axios
+          .post(
+            `https://graph.facebook.com/v16.0/${phoneNumberId}/messages`,
+            newdata,
+            {
+              headers: {
+                Authorization: `Bearer ${access_token}`,
+                "Content-Type": "application/json",
+              },
+              timeout: 10000, // add a timeout of 10 seconds
+            }
+          )
+          .then(() => {
+            res.status(200).send();
+          })
+          .catch((err) => {
+            console.log(err);
+            res.status(404).send();
+          });
       })
       .catch((err) => {
         console.log(err);
-        res.status(404);
+        res.status(404).send();
       });
   } else {
-    res.status(404);
+    res.status(404).send();
   }
 });
 
