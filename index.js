@@ -24,3 +24,7 @@ app.get("/webhooks", (req, res) => {
     res.status(403);
   }
 });
+
+app.post("/webhooks", (req, res) => {
+  console.log(req.body);
+});
