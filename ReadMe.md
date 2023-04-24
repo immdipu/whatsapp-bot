@@ -13,8 +13,7 @@ This is a chatbot for WhatsApp that allows users to interact with it by sending 
 ## How to use
 
 1. Add the phone number +9779840348027 to your WhatsApp contacts.
-2. Send a messa
-   ge to the phone number to start a conversation with the chatbot.
+2. Send a message to the phone number to start a conversation with the chatbot.
 
 ## Contributing
 
