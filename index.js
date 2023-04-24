@@ -20,6 +20,7 @@ const getRes = async (text) => {
     message: text,
   });
   const result = res.data.message;
+  console.log(result);
   return result;
 };
 
