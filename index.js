@@ -1,6 +1,5 @@
 const express = require("express");
 const dotenv = require("dotenv");
-const bodyParser = require("body-parser");
 
 const axios = require("axios");
 
@@ -49,14 +48,14 @@ app.post("/webhooks", (req, res) => {
     let text = data.entry[0].changes[0].value.messages[0].text.body;
 
     getRes(text)
-      .then((res) => {
+      .then((resp) => {
         let newdata = JSON.stringify({
           messaging_product: "whatsapp",
           recipient_type: "individual",
           to: phoneNumber,
           type: "text",
           text: {
-            body: res,
+            body: resp,
           },
         });
 
