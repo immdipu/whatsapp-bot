@@ -41,7 +41,7 @@ app.post("/webhooks", (req, res) => {
     data &&
     data?.entry[0] &&
     data.entry[0]?.changes[0] &&
-    data.entry[0].changes[0]?.value?.messages[0]
+    data.entry[0].changes[0]?.value?.messages
   ) {
     let phoneNumber = data.entry[0].changes[0].value.messages[0].from;
     let phoneNumberId = data.entry[0].changes[0].value.metadata.phone_number_id;
