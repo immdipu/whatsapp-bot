@@ -1,11 +1,13 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const bodyParser = require("body-parser");
+const axios = require("axios");
 
 dotenv.config();
 
 let port = process.env.PORT || 3000;
 let mytoken = process.env.TOKEN;
+const access_token = process.env.ACCESS_TOKEN;
 
 const app = express();
 app.use(express.json());
@@ -26,5 +28,31 @@ app.get("/webhooks", (req, res) => {
 });
 
 app.post("/webhooks", (req, res) => {
-  console.log(req.body);
+  const data = req.body;
+  let phoneNumber = data.entry[0].changes[0].value.messages[0].from;
+  let phoneNumberId = data.entry[0].changes[0].value.metadata.phone_number_id;
+  let name = data.entry[0].changes[0].value.contacts[0].profile.name;
+  let text = data.entry[0].changes[0].value.messages[0].text.body;
+
+  let newdata = JSON.stringify({
+    messaging_product: "whatsapp",
+    recipient_type: "individual",
+    to: phoneNumber,
+    type: "text",
+    text: {
+      body: "Hello how are you ",
+    },
+  });
+
+  axios.post(
+    `https://graph.facebook.com/v16.0/${phoneNumberId}/messages`,
+    newdata,
+    {
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  res.status(200);
 });
