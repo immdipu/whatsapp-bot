@@ -49,7 +49,7 @@ app.post("/webhooks", (req, res) => {
     let text = data.entry[0].changes[0].value.messages[0].text.body;
 
     getRes(text)
-      .then((resp) => {
+      .then(async (resp) => {
         let newdata = JSON.stringify({
           messaging_product: "whatsapp",
           recipient_type: "individual",
@@ -60,7 +60,7 @@ app.post("/webhooks", (req, res) => {
           },
         });
 
-        axios.post(
+        await axios.post(
           `https://graph.facebook.com/v16.0/${phoneNumberId}/messages`,
           newdata,
           {
